@@ -1,4 +1,4 @@
-# 仅供 learning/ 下三个 CPU 教学实验使用；完整训练依赖见 requirements.txt。
+# 仅供 learning/ 下的 CPU 教学实验使用；完整训练依赖见 requirements.txt。
 numpy==1.26.4
 torch==2.6.0
 transformers==4.57.6
