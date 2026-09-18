@@ -20,9 +20,9 @@
 
 从头学习可先读 [导学页](guide/00-start.md)，按表中顺序运行实验，再对照上游源码。已经有基础的读者可以直接看 [源码地图](docs/source-map.md) 或 [完整原作者 README](README.upstream.md)。
 
-## 快速开始：不租 GPU 也能学
+## 快速开始：
 
-以下脚本只用本仓库内的小样本或随机初始化的小模型；不下载 GB 级数据、不加载正式权重，也不会改动 `out/`。在 macOS/Linux 的仓库根目录运行：
+以下脚本只用本仓库内的小样本或随机初始化的小模型；不加载正式权重，也不会改动 `out/`。在 macOS/Linux 的仓库根目录运行：
 
 ```bash
 conda create -y --prefix ./.venv python=3.12
