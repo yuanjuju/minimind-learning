@@ -3,4 +3,24 @@ __pycache__/
 .DS_Store
 out
 website/
+
+# 本地训练、推理和课程实验产生的文件；不要提交权重、数据或缓存。
+.venv/
+.cache/
+checkpoints/
+logs/
+runs/
+wandb/
+dataset/*.jsonl
+dataset/*.json
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.gguf
+
+# 本地凭据和机器配置。
+.env
+.env.*
+*.pem
 docs-minimind/
