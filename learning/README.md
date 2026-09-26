@@ -1,5 +1,13 @@
 # CPU 实验台：把大模型拆开观察
 
+统一运行全部机制检查与参数审计：
+
+```bash
+./.venv/bin/python learning/run_diagnostics.py
+```
+
+默认生成 `.cache/diagnostics/latest.json`，记录依赖版本、源码指纹、各项输出与退出码。已运行的公开样例见 [CPU baseline](../docs/diagnostics/cpu-baseline.json)，诊断设计与验证范围见 [Training Systems Analysis](../docs/training-systems.md#diagnostic-harness-and-evidence)。单独导出默认 Dense 结构的参数统计和解析 KV 预算，可运行 `./.venv/bin/python learning/profile_model.py`；该项使用 meta device，不加载权重。
+
 这里的 `.py` 和小型 `.jsonl` 样本是本仓库新增的学习材料，不属于上游 MiniMind 源码；所有示例都在项目根目录运行。建议先读 [导学页](../guide/00-start.md)，每次运行前预测输出，再回到相应上游实现核对。
 
 | 顺序 | 命令 | 要观察什么 |
