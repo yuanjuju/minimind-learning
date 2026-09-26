@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">MiniMind Training Systems Lab</title>
+  <desc id="desc">Data contracts flow through a decoder-only Transformer, pretraining and supervised fine-tuning, then checkpoint verification. Pinned MiniMind backbone with GQA, RoPE and SwiGLU.</desc>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#26384a" stroke-width=".5"/></pattern>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="none" stroke="#74dcc4" stroke-width="1.2"/></marker>
+  </defs>
+  <rect width="1200" height="420" rx="18" fill="#101a29"/>
+  <rect width="1200" height="420" rx="18" fill="url(#grid)"/>
+  <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif">
+    <rect x="40" y="34" width="8" height="8" fill="#74dcc4"/>
+    <text x="60" y="44" font-size="13" fill="#91a8bd" letter-spacing="2">YUANJUJU / MODEL TRAINING &amp; SYSTEM ANALYSIS</text>
+    <text x="40" y="104" font-size="39" font-weight="700" fill="#f1f6fc">MiniMind Training Systems Lab</text>
+    <text x="40" y="138" font-size="17" fill="#adbdcf">Causal language modeling · Supervision contracts · Optimization dynamics · Artifact integrity</text>
+    <g fill="#17283b" stroke="#3a536a"><rect x="40" y="186" width="242" height="132" rx="10"/><rect x="326" y="186" width="252" height="132" rx="10"/><rect x="622" y="186" width="252" height="132" rx="10"/><rect x="918" y="186" width="242" height="132" rx="10"/></g>
+    <g fill="#74dcc4" font-size="12" letter-spacing="1.5"><text x="60" y="211">01 / DATA CONTRACTS</text><text x="346" y="211">02 / MODEL BACKBONE</text><text x="642" y="211">03 / OPTIMIZATION</text><text x="938" y="211">04 / ARTIFACTS</text></g>
+    <g fill="#f1f6fc" font-size="20" font-weight="600"><text x="60" y="245">Token → Target</text><text x="346" y="245">Decoder Transformer</text><text x="642" y="245">Pretrain → Full SFT</text><text x="938" y="245">Weights → Inference</text></g>
+    <g fill="#adbdcf" font-size="14"><text x="60" y="276">BPE · Chat Template</text><text x="60" y="298">Causal Shift · Label Masking</text><text x="346" y="276">GQA · QK-Norm · RoPE</text><text x="346" y="298">SwiGLU · Tied Embeddings</text><text x="642" y="276">AdamW · Gradient Accumulation</text><text x="642" y="298">Mixed Precision · Clipping</text><text x="938" y="276">Checkpoint Lineage</text><text x="938" y="298">SHA-256 · CPU Diagnostics</text></g>
+    <g fill="none" stroke="#74dcc4" stroke-width="1.7" marker-end="url(#arrow)"><path d="M285 252H318"/><path d="M581 252H614"/><path d="M877 252H910"/></g>
+    <path d="M40 349H1160" stroke="#34495e"/>
+    <g font-size="13" font-family="ui-monospace,SFMono-Regular,Consolas,monospace"><text x="40" y="381" fill="#eac682">8 LAYERS</text><text x="186" y="381" fill="#adbdcf">d_model = 768</text><text x="400" y="381" fill="#adbdcf">Q:KV = 8:4</text><text x="608" y="381" fill="#adbdcf">vocab = 6,400</text><text x="850" y="381" fill="#91a8bd">PINNED BACKBONE / 7a9137d</text></g>
+  </g>
+</svg>
