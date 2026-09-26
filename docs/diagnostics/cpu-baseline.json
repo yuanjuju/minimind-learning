@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "collected_at_utc": "2026-09-26T13:33:11.638967+00:00",
+  "scope": "CPU mechanism checks on toy samples; no trained checkpoints or quality benchmarks",
+  "environment": {
+    "python": "3.12.14",
+    "os": "Darwin",
+    "architecture": "arm64",
+    "packages": {
+      "torch": "2.6.0",
+      "transformers": "4.57.6",
+      "numpy": "1.26.4",
+      "datasets": "3.6.0"
+    }
+  },
+  "source_sha256": {
+    "model/model_minimind.py": "47f124f5f386a8cd76b488b36ecc3e00fc43e3894cdb3ba602420188d9ba8860",
+    "model/tokenizer.json": "71f32c68cf63a15355a8fc171b7594b3d41870fe0ddb54fc6aefa55f73a4a668",
+    "model/tokenizer_config.json": "d7cd6a60c9f191c4f9ffec69b2eb289ad2f960366724f328b681ae1e46e4c110",
+    "dataset/lm_dataset.py": "e6dd56b5745015ddc1579932c292ec7a5e1cc33796a5eadf4911065d92f1c6b8",
+    "learning/sample_pretrain.jsonl": "6f48e26210175b9e597d1564d128065c5640eb52bd31c55c9226e058c46bc8d6",
+    "learning/sample_sft.jsonl": "2144a0059977419a24bd6eb0b43de70065b8539343387b1b087a59ec519ad38f",
+    "requirements-learning.txt": "d0979bf217befa35c81c0b5c1ba445b413a2fcec5e0f780f41dee2289b1faa84",
+    "learning/run_diagnostics.py": "006e337e47a6b0426fe1a9524ca75ba4fe9ad892f121d80eb6278ac176c9520a",
+    "learning/inspect_tokenizer.py": "aef7be946f94f81fb3d20b6e782aed43d9d51a227deb13de5862e94d0efe96d7",
+    "learning/inspect_pretrain_labels.py": "ed1d1cd9c81543a7aac2a1ec71419446d9a3ca11e2a7adf781382127c521f31b",
+    "learning/inspect_sft_labels.py": "54159bcc80f94086cad872dc111bd5b4ad990b68010fb1c0d758c013b16da674",
+    "learning/inspect_model_shapes.py": "2219fa247201e27235e2622298526ba93fafaccd598f668045dbfa69e1080a0a",
+    "learning/one_step_training.py": "d801365a00aaeb44860b026ff0552687680f59c257ffa865228d950a05577f83",
+    "learning/inspect_prompts.py": "251f834ff82a984bc2523a629e54c9a0d280c524fadd2c1cbc3edac7f6b438cf",
+    "learning/profile_model.py": "de7d245ae6750e87657f6227e4c4d48d60ec42913030e319152a78a702560496"
+  },
+  "experiments": [
+    {
+      "id": "tokenizer_contract",
+      "script": "learning/inspect_tokenizer.py",
+      "status": "passed",
+      "returncode": 0,
+      "stdout": "原文：你好，MiniMind！\ntoken 片段： ['ä½łå¥½', 'ï¼Į', 'M', 'in', 'i', 'M', 'ind', 'ï¼ģ']\ntoken ID： [1968, 294, 80, 301, 108, 80, 916, 1364]\n解码结果： 你好，MiniMind！\n字符数：12；token 数：8。两者不必相等。\n\n特殊标记（名称 → 字符串 → ID）：\nbos: '<|im_start|>' → 1\neos: '<|im_end|>' → 2\npad: '<|endoftext|>' → 0\n\n同一 tokenizer 渲染聊天模板后的文本：\n<|im_start|>user\n你好<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n你好！<|im_end|>\n\n模板中包含角色、结束标记；不能把它当成普通的『你好你好！』文本。\n",
+      "stderr": ""
+    },
+    {
+      "id": "pretrain_supervision",
+      "script": "learning/inspect_pretrain_labels.py",
+      "status": "passed",
+      "returncode": 0,
+      "stdout": "示例：预训练文本『你好！』\n模型实际看到的文本：\n<|im_start|>你好！<|im_end|>\n\n位置  当前 token          要预测的下一 token    下一位置的 label  计入 loss\n-----------------------------------------------------------------------------\n   0  '<|im_start|>'       '你好'                           1968  是\n   1  '你好'                 '！'                            1364  是\n   2  '！'                  '<|im_end|>'                      2  是\n   3  '<|im_end|>'         '<|endoftext|>'                -100  否\n\n共 64 个输入 token；其中 3 次下一 token 预测计入预训练损失。\n注意：labels[0] 是 BOS 的 ID，但模型计算 loss 时从 labels[1] 开始，因此它不计分。\n",
+      "stderr": ""
+    },
+    {
+      "id": "sft_supervision",
+      "script": "learning/inspect_sft_labels.py",
+      "status": "passed",
+      "returncode": 0,
+      "stdout": "示例：用户说『你好』，助手答『你好！』\n模型实际看到的对话：\n<|im_start|>user\n你好<|im_end|>\n<|im_start|>assistant\n你好！<|im_end|>\n\n\n位置  当前 token          要预测的下一 token    下一位置的 label  计入 loss\n-----------------------------------------------------------------------------\n   0  '<|im_start|>'       'us'                           -100  否\n   1  'us'                 'er'                           -100  否\n   2  'er'                 '\\n'                           -100  否\n   3  '\\n'                 '你好'                           -100  否\n   4  '你好'                 '<|im_end|>'                   -100  否\n   5  '<|im_end|>'         '\\n'                           -100  否\n   6  '\\n'                 '<|im_start|>'                 -100  否\n   7  '<|im_start|>'       'ass'                          -100  否\n   8  'ass'                'ist'                          -100  否\n   9  'ist'                'ant'                          -100  否\n  10  'ant'                '\\n'                           -100  否\n  11  '\\n'                 '你好'                           1968  是\n  12  '你好'                 '！'                            1364  是\n  13  '！'                  '<|im_end|>'                      2  是\n  14  '<|im_end|>'         '\\n'                            234  是\n  15  '\\n'                 '<|endoftext|>'                -100  否\n\n共 64 个输入 token；其中 4 个位置计入 SFT 损失。\n",
+      "stderr": ""
+    },
+    {
+      "id": "tensor_shapes",
+      "script": "learning/inspect_model_shapes.py",
+      "status": "passed",
+      "returncode": 0,
+      "stdout": "输入 ID [batch, seq]：(1, 4)\nembedding [batch, seq, hidden]：(1, 4, 64)\n第一层 Q/K/V 投影：(1, 4, 64) / (1, 4, 32) / (1, 4, 32)\n注意力头：Q=8，K/V=4，head_dim=8\n最终 logits [batch, seq, vocab]：(1, 4, 6400)\n临时模型的独立参数量：532,832\n注意：Q/K/V 是同一输入的三种投影；这里只看投影形状，完整注意力仍在模型前向计算中。\n模型未加载预训练权重，logits 是随机初始化模型的输出，不要拿它测试回答质量。\n",
+      "stderr": ""
+    },
+    {
+      "id": "gradient_update",
+      "script": "learning/one_step_training.py",
+      "status": "passed",
+      "returncode": 0,
+      "stdout": "临时模型参数量：532,832\n本次前向计算的 loss：8.7093\nlm_head.weight 的梯度范数：5.546184\noptimizer.step() 后该权重的最大变化：0.00100055\n没有加载或保存任何训练权重文件；进程结束后这个临时模型就消失。\n",
+      "stderr": ""
+    },
+    {
+      "id": "prompt_protocol",
+      "script": "learning/inspect_prompts.py",
+      "status": "passed",
+      "returncode": 0,
+      "stdout": "同一个问题，不同阶段的输入格式：\n\n[预训练权重的文本续写前缀]\n'<|im_start|>请用一句话介绍你自己'\n\n[SFT 权重的对话前缀]\n'<|im_start|>user\\n请用一句话介绍你自己<|im_end|>\\n<|im_start|>assistant\\n<think>\\n\\n</think>\\n\\n'\n\n长度：预训练 8 tokens；SFT 24 tokens\n这里只比较提示词，不加载权重，也不判断两种模型的回答质量。\n",
+      "stderr": ""
+    },
+    {
+      "id": "model_census",
+      "script": "learning/profile_model.py",
+      "status": "passed",
+      "returncode": 0,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"method\": \"Meta-device parameter census; analytical KV payload, not measured memory\",\n  \"source\": \"model/model_minimind.py\",\n  \"source_sha256\": \"47f124f5f386a8cd76b488b36ecc3e00fc43e3894cdb3ba602420188d9ba8860\",\n  \"config\": {\n    \"hidden_size\": 768,\n    \"num_hidden_layers\": 8,\n    \"vocab_size\": 6400,\n    \"num_attention_heads\": 8,\n    \"num_key_value_heads\": 4,\n    \"head_dim\": 96,\n    \"intermediate_size\": 2432,\n    \"rope_theta\": 1000000.0,\n    \"tie_word_embeddings\": true,\n    \"use_moe\": false\n  },\n  \"unique_parameters\": 63912192,\n  \"parameter_groups\": {\n    \"tied_embedding_and_head\": 4915200,\n    \"attention_projections\": 14155776,\n    \"feed_forward\": 44826624,\n    \"normalization\": 14592\n  },\n  \"kv_payload\": {\n    \"dtype_bytes\": 2,\n    \"bytes_per_token_per_sequence\": 12288,\n    \"example_sequence_tokens\": 2048,\n    \"example_bytes_per_sequence\": 25165824,\n    \"scope\": \"K and V tensors only; excludes weights, activations, temporary repeat_kv, allocator overhead\"\n  }\n}\n",
+      "stderr": ""
+    }
+  ],
+  "passed": true
+}
